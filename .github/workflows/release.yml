@@ -1,0 +1,53 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Build with PyInstaller
+        run: |
+          pyinstaller --onefile --noconsole --name agy-quota-monitor src/main.py
+
+      - name: Create GitHub Release and Upload Binary
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/agy-quota-monitor.exe
+          body: |
+            ## Antigravity Quota Monitor Release
+            
+            This executable was built automatically via GitHub Actions from the open-source code in this commit.
+            
+            ### SHA-256 Checksum
+            To verify the integrity of the downloaded file, you can check its SHA-256 hash in PowerShell:
+            ```powershell
+            Get-FileHash -Algorithm SHA256 .\agy-quota-monitor.exe
+            ```
+            
+            ### Security and Transparency
+            - Built entirely on GitHub-managed Windows runners.
+            - Does NOT collect or send any telemetry.
+            - Communicates solely with the local loopback server (`127.0.0.1`) spawned by Antigravity.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
