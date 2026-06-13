@@ -28,7 +28,7 @@ jobs:
 
       - name: Build with PyInstaller
         run: |
-          pyinstaller --onefile --noconsole --name agy-quota-monitor src/main.py
+          pyinstaller --onefile --noconsole --name agy-quota-monitor main.py
 
       - name: Create GitHub Release and Upload Binary
         uses: softprops/action-gh-release@v2

@@ -1,11 +1,7 @@
 import sys
-import os
 import threading
 import logging
 import time
-
-# Ensure root directory is in sys.path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from src.config import setup_logging, config
 from src.process_finder import discover_active_processes

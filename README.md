@@ -57,7 +57,7 @@ Windowsのタスクバー（システムトレイ）常駐型の Antigravity（I
    ```
 3. アプリケーションを実行します。
    ```bash
-   python src/main.py
+   python main.py
    ```
 
 ### 方法C：自分でビルドする (セルフビルド)
@@ -65,7 +65,7 @@ Windowsのタスクバー（システムトレイ）常駐型の Antigravity（I
 
 1. 開発用の依存関係がインストールされていることを確認し、以下を実行します。
    ```bash
-   pyinstaller --onefile --noconsole --name agy-quota-monitor src/main.py
+   pyinstaller --onefile --noconsole --name agy-quota-monitor main.py
    ```
 2. ビルド成功後、`dist/agy-quota-monitor.exe` に実行ファイルが生成されます。
 
