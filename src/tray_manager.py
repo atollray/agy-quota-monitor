@@ -179,10 +179,10 @@ class TrayManager:
             detail_items = []
             for m in self.current_snapshot.models:
                 pct_str = f"{m.percentage}%" if m.percentage is not None else "No Limit"
-                detail_items.append(item(f"{m.label}: {pct_str} (Reset: {m.time_until_reset_formatted})", lambda: None, enabled=False))
+                detail_items.append(item(f"{m.label}: {pct_str} (Reset: {m.time_until_reset_formatted})", lambda: None, enabled=True))
             if self.current_snapshot.credits:
                 cre = self.current_snapshot.credits
-                detail_items.append(item(f"Monthly Credits: {cre.available}/{cre.monthly} ({cre.percentage}%)", lambda: None, enabled=False))
+                detail_items.append(item(f"Monthly Credits: {cre.available}/{cre.monthly} ({cre.percentage}%)", lambda: None, enabled=True))
             menu_items.append(item("全モデル詳細表示 (Show Details)", Menu(*detail_items)))
         
         # 2. Refresh Now
@@ -226,6 +226,8 @@ class TrayManager:
             
         # 5. Polling Interval submenu
         intervals = [
+            ("1分", 60),
+            ("3分", 180),
             ("5分", 300),
             ("10分", 600),
             ("15分", 900),

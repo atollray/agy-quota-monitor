@@ -1,4 +1,5 @@
 import subprocess
+import os
 import json
 import re
 import urllib.request
@@ -6,6 +7,11 @@ import urllib.error
 import ssl
 import logging
 import time
+
+# Windows-specific flags to prevent console flashing
+SUBPROCESS_CREATIONFLAGS = 0
+if os.name == 'nt':
+    SUBPROCESS_CREATIONFLAGS = subprocess.CREATE_NO_WINDOW
 
 # Process names we look for
 TARGET_PROCESSES = ["language_server.exe", "language_server_windows_x64.exe"]
@@ -40,7 +46,7 @@ def get_process_list_powershell():
         "Select-Object ProcessId, Name, CommandLine | ConvertTo-Json"
     ]
     try:
-        res = subprocess.run(cmd, capture_output=True, text=True, timeout=5, encoding="utf-8", errors="ignore")
+        res = subprocess.run(cmd, capture_output=True, text=True, timeout=5, encoding="utf-8", errors="ignore", creationflags=SUBPROCESS_CREATIONFLAGS)
         if res.returncode == 0 and res.stdout.strip():
             data = json.loads(res.stdout.strip())
             # Convert single object to list if only one process returned
@@ -58,7 +64,7 @@ def get_process_list_wmic():
            "name='language_server.exe' or name='language_server_windows_x64.exe'", 
            "get", "ProcessId,Name,CommandLine", "/format:list"]
     try:
-        res = subprocess.run(cmd, capture_output=True, text=True, timeout=5, encoding="utf-8", errors="ignore")
+        res = subprocess.run(cmd, capture_output=True, text=True, timeout=5, encoding="utf-8", errors="ignore", creationflags=SUBPROCESS_CREATIONFLAGS)
         if res.returncode == 0:
             processes = []
             blocks = res.stdout.split("\n\n")
@@ -126,7 +132,7 @@ def get_listening_ports_powershell(pid):
         "Select-Object -ExpandProperty LocalPort | ConvertTo-Json"
     ]
     try:
-        res = subprocess.run(cmd, capture_output=True, text=True, timeout=5, encoding="utf-8", errors="ignore")
+        res = subprocess.run(cmd, capture_output=True, text=True, timeout=5, encoding="utf-8", errors="ignore", creationflags=SUBPROCESS_CREATIONFLAGS)
         if res.returncode == 0 and res.stdout.strip():
             data = json.loads(res.stdout.strip())
             if isinstance(data, int):
@@ -142,7 +148,7 @@ def get_listening_ports_netstat(pid):
     cmd = ["netstat", "-ano"]
     ports = []
     try:
-        res = subprocess.run(cmd, capture_output=True, text=True, timeout=5, encoding="utf-8", errors="ignore")
+        res = subprocess.run(cmd, capture_output=True, text=True, timeout=5, encoding="utf-8", errors="ignore", creationflags=SUBPROCESS_CREATIONFLAGS)
         if res.returncode == 0:
             lines = res.stdout.splitlines()
             for line in lines:

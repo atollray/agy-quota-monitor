@@ -9,7 +9,7 @@ LOG_FILE = os.path.join(APP_DIR, f"{APP_NAME}.log")
 
 # Polling configuration
 DEFAULT_POLLING_INTERVAL = 900  # 15 minutes in seconds
-MIN_POLLING_INTERVAL = 300      # 5 minutes in seconds
+MIN_POLLING_INTERVAL = 60       # 1 minute in seconds
 
 class Config:
     def __init__(self):
