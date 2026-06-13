@@ -5,3 +5,9 @@ dist/
 *.spec
 .quotachecker/
 *.log
+
+# AI agent documentation and memory
+AGENTS.md
+agents.md
+MEMORY.md
+memory.md
